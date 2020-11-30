@@ -5,12 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madlevel6task2.R
+import com.example.madlevel6task2.adapter.MovieAdapter
 import com.example.madlevel6task2.model.MovieJson.Movie
 import com.example.madlevel6task2.viewModel.TheMovieDatabaseViewModel
 import kotlinx.android.synthetic.main.fragment_popular_movies.*
+
+const val BUNDLE_MOVIE_KEY = "bundle_movie_key"
+const val REQ_MOVIE_KEY = "req_movie_key"
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -20,6 +28,7 @@ class PopularMoviesFragment : Fragment() {
     private val viewModel: TheMovieDatabaseViewModel by viewModels()
 
     private val movies = arrayListOf<Movie>()
+    private val moviesAdapter = MovieAdapter(movies, ::onMovieClick)
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -32,12 +41,25 @@ class PopularMoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        rvMovies.apply {
+            adapter = moviesAdapter
+            layoutManager = GridLayoutManager(context, 2)
+        }
+
         btnSubmit.setOnClickListener {
             this.validateAndSubmitMovieYear()
         }
 
         // Observe the LiveData in the viewModel for any error messages
         this.observeMovies()
+    }
+
+    /**
+     * Send data to the movie_details fragment with the clicked movie
+     */
+    private fun onMovieClick(movie: Movie) {
+        setFragmentResult(REQ_MOVIE_KEY, bundleOf(Pair(BUNDLE_MOVIE_KEY, movie)))
+        findNavController().navigate(R.id.action_PopularMoviesFragment_to_MovieDetailFragment)
     }
 
     /**
@@ -66,9 +88,7 @@ class PopularMoviesFragment : Fragment() {
         viewModel.movies.observe(viewLifecycleOwner, {
             movies.clear()
             movies.addAll(it)
-            //moviesAdapter.notifyDataSetChanged()
-
-            Toast.makeText(activity, movies.size.toString(), Toast.LENGTH_LONG).show()
+            moviesAdapter.notifyDataSetChanged()
         })
     }
 }
