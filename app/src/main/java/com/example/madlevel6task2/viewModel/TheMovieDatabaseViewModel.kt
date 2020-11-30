@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.madlevel6task2.repository.MoviesDbApiError
 import com.example.madlevel6task2.repository.TheMovieDatabaseRepository
 import kotlinx.coroutines.launch
 
@@ -22,8 +23,6 @@ class TheMovieDatabaseViewModel(application: Application) : AndroidViewModel(app
 
     /**
      * Expose non MutableLiveData via getter
-     * errorText can be observed from Activity for error showing
-     * Encapsulation :)
      */
     val errorText: LiveData<String>
         get() = _errorText
@@ -36,7 +35,7 @@ class TheMovieDatabaseViewModel(application: Application) : AndroidViewModel(app
         viewModelScope.launch {
             try {
                 moviesRepository.getPopularMoviesByYear(year)
-            } catch (error: TheMovieDatabaseRepository.MoviesDbApiError) {
+            } catch (error: MoviesDbApiError) {
                 _errorText.value = error.message
                 Log.e("Movies DB API error", error.cause.toString())
             }
