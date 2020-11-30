@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.madlevel6task2.api.TheMovieDatabaseApi
 import com.example.madlevel6task2.api.TheMovieDatabaseApiService
-import com.example.madlevel6task2.model.Movie
+import com.example.madlevel6task2.model.MovieJson.Movie
 import kotlinx.coroutines.withTimeout
 
+class MoviesDbApiError(message: String, cause: Throwable) : Throwable(message, cause)
 
 class TheMovieDatabaseRepository {
-    private val theMoviesDatabaseApiService: TheMovieDatabaseApiService = TheMovieDatabaseApi.createApi()
 
+    private val theMoviesDatabaseApiService: TheMovieDatabaseApiService = TheMovieDatabaseApi.createApi()
     private val _movies: MutableLiveData<List<Movie>> = MutableLiveData()
 
     /**
@@ -25,15 +26,13 @@ class TheMovieDatabaseRepository {
     suspend fun getPopularMoviesByYear(year: Number)  {
         try {
             //timeout the request after 5 seconds
-            val result = withTimeout(5_000) {
+            val movieResponse = withTimeout(5_000) {
                 theMoviesDatabaseApiService.getPopularMovies(year, "popularity.desc")
             }
 
-            _movies.value = result
+            _movies.value = movieResponse.results
         } catch (error: Throwable) {
             throw MoviesDbApiError("Unable to retrieve movies", error)
         }
     }
-
-    class MoviesDbApiError(message: String, cause: Throwable) : Throwable(message, cause)
 }
