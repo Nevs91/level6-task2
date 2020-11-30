@@ -1,10 +1,10 @@
 package com.example.madlevel6task2.api
 
-import okhttp3.OkHttpClient
+import com.example.madlevel6task2.BuildConfig
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 class TheMovieDatabaseApi {
     companion object {
@@ -23,14 +23,34 @@ class TheMovieDatabaseApi {
                 .build()
 
             // Create the Retrofit instance
-            val triviaApi = Retrofit.Builder()
+            val movieDatabaseApi= Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
             // Return the Retrofit NumbersApiService
-            return triviaApi.create(TheMovieDatabaseApiService::class.java)
+            return movieDatabaseApi.create(TheMovieDatabaseApiService::class.java)
         }
+    }
+}
+
+class KeyInterceptor : Interceptor {
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val original: Request = chain.request()
+        val originalHttpUrl: HttpUrl = original.url
+
+        // Add the API key to the request
+        val url = originalHttpUrl.newBuilder()
+            .addQueryParameter("api_key", BuildConfig.MOVIE_DATABASE_KEY)
+            .build()
+
+        // Request customization: add request headers
+        val requestBuilder: Request.Builder = original.newBuilder()
+            .url(url)
+
+        val request: Request = requestBuilder.build()
+        return chain.proceed(request)
     }
 }
