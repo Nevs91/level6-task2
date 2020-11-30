@@ -13,4 +13,8 @@
     <string name="year_input_label">year</string>
     <string name="submit">Submit</string>
     <string name="img_movie_description">Movie description</string>
+    <string name="img_cover">Movie cover</string>
+    <string name="movie_banner">Movie banner</string>
+    <string name="movie_rating">Movie rating</string>
+    <string name="movie_description_title">Overview</string>
 </resources>

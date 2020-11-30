@@ -17,8 +17,8 @@ import com.example.madlevel6task2.model.MovieJson.Movie
 import com.example.madlevel6task2.viewModel.TheMovieDatabaseViewModel
 import kotlinx.android.synthetic.main.fragment_popular_movies.*
 
-const val BUNDLE_MOVIE_KEY = "bundle_movie_key"
-const val REQ_MOVIE_KEY = "req_movie_key"
+const val REQ_MOVIE_KEY = "req_movie"
+const val BUNDLE_MOVIE_KEY = "bundle_movie"
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
