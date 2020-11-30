@@ -7,22 +7,47 @@
     tools:context=".MovieDetailFragment">
 
     <TextView
-        android:id="@+id/textview_first"
+        android:id="@+id/tvSearchTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_first_fragment"
-        app:layout_constraintBottom_toTopOf="@id/button_first"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/popular_movies_search"
+        app:layout_constraintBottom_toBottomOf="@+id/etYear"
+        app:layout_constraintEnd_toStartOf="@+id/etYear"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/etYear" />
+
+    <EditText
+        android:id="@+id/etYear"
+        android:layout_width="107dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
+        app:layout_constraintStart_toEndOf="@+id/tvSearchTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="@string/year_input_label"
+        android:hint="@string/year_input_label"/>
 
     <Button
-        android:id="@+id/button_first"
+        android:id="@+id/btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <GridView
+        android:id="@+id/gvMovies"
+        android:layout_width="411dp"
+        android:layout_height="634dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_first" />
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
