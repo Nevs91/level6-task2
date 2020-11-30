@@ -9,6 +9,7 @@ interface TheMovieDatabaseApiService {
     // The GET method needed to retrieve popular movies for a specified year
     @GET("discover/movie?")
     suspend fun getPopularMovies(
-        @Query("year") year: Number
+        @Query("year") year: Number,
+        @Query("sort_by") sortBy: String,
     ): List<Movie>
 }

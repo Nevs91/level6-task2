@@ -26,14 +26,14 @@ class TheMovieDatabaseRepository {
         try {
             //timeout the request after 5 seconds
             val result = withTimeout(5_000) {
-                theMoviesDatabaseApiService.getPopularMovies(year)
+                theMoviesDatabaseApiService.getPopularMovies(year, "popularity.desc")
             }
 
             _movies.value = result
         } catch (error: Throwable) {
-            throw TheMoviesDatabaseApiError("Unable to retrieve movies", error)
+            throw MoviesDbApiError("Unable to retrieve movies", error)
         }
     }
 
-    class TheMoviesDatabaseApiError(message: String, cause: Throwable) : Throwable(message, cause)
+    class MoviesDbApiError(message: String, cause: Throwable) : Throwable(message, cause)
 }
