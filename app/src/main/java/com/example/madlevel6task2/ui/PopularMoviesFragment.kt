@@ -1,10 +1,12 @@
 package com.example.madlevel6task2.ui
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -18,6 +20,7 @@ import com.example.madlevel6task2.model.MovieJson.Movie
 import com.example.madlevel6task2.viewModel.TheMovieDatabaseViewModel
 import kotlinx.android.synthetic.main.fragment_popular_movies.*
 import kotlin.math.floor
+
 
 const val REQ_MOVIE_KEY = "req_movie"
 const val BUNDLE_MOVIE_KEY = "bundle_movie"
@@ -47,6 +50,13 @@ class PopularMoviesFragment : Fragment() {
         initViews()
 
         btnSubmit.setOnClickListener {
+
+            // Close the keyboard after submitting a year
+            if (activity?.currentFocus != null) {
+                val imm: InputMethodManager = requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+
             this.validateAndSubmitMovieYear()
         }
 
