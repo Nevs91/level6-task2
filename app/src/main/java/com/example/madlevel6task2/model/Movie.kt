@@ -7,9 +7,9 @@ import kotlinx.android.parcel.Parcelize
 class MovieJson {
 
     /**
-     * Root class for the Json response send back from the API request
+     * Base class for the Json response send back from the API request
      */
-    data class Root(
+    data class Base(
         @SerializedName("page") val page: Int,
         @SerializedName("total_results") val total_results: Int,
         @SerializedName("total_pages") val total_pages: Int,

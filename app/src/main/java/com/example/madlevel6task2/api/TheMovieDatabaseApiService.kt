@@ -11,5 +11,5 @@ interface TheMovieDatabaseApiService {
     suspend fun getPopularMovies(
         @Query("year") year: Number,
         @Query("sort_by") sortBy: String,
-    ): MovieJson.Root
+    ): MovieJson.Base
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.example.madlevel6task2.adapter.MovieAdapter
 import com.example.madlevel6task2.model.MovieJson.Movie
 import com.example.madlevel6task2.viewModel.TheMovieDatabaseViewModel
 import kotlinx.android.synthetic.main.fragment_popular_movies.*
+import kotlin.math.floor
 
 const val REQ_MOVIE_KEY = "req_movie"
 const val BUNDLE_MOVIE_KEY = "bundle_movie"
@@ -41,10 +43,8 @@ class PopularMoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvMovies.apply {
-            adapter = moviesAdapter
-            layoutManager = GridLayoutManager(context, 2)
-        }
+        // Initialize the view which shows the movies returned from the API
+        initViews()
 
         btnSubmit.setOnClickListener {
             this.validateAndSubmitMovieYear()
@@ -52,6 +52,25 @@ class PopularMoviesFragment : Fragment() {
 
         // Observe the LiveData in the viewModel for any error messages
         this.observeMovies()
+    }
+
+    private fun initViews() {
+        val gridLayoutManager = GridLayoutManager(context, 2)
+
+        // Set the adapter and layout manager
+        rvMovies.apply {
+            adapter = moviesAdapter
+            layoutManager = gridLayoutManager
+        }
+
+        // Add Global Layout Listener to calculate the span count.
+        rvMovies.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                rvMovies.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                gridLayoutManager.spanCount = calculateSpanCount()
+                gridLayoutManager.requestLayout()
+            }
+        })
     }
 
     /**
@@ -90,5 +109,17 @@ class PopularMoviesFragment : Fragment() {
             movies.addAll(it)
             moviesAdapter.notifyDataSetChanged()
         })
+    }
+
+    /**
+     * Calculate the number of spans for the recycler view based on the recycler view width.
+     * @return int number of spans.
+     */
+    private fun calculateSpanCount(): Int {
+        val viewWidth = rvMovies.measuredWidth
+        val cardViewWidth = resources.getDimension(R.dimen.poster_width)
+        val cardViewMargin = resources.getDimension(R.dimen.margin_medium)
+        val spanCount = floor((viewWidth / (cardViewWidth + cardViewMargin)).toDouble()).toInt()
+        return if (spanCount >= 1) spanCount else 1
     }
 }
