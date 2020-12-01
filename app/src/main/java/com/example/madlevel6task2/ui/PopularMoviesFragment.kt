@@ -120,6 +120,7 @@ class PopularMoviesFragment : Fragment() {
             movies.clear()
             movies.addAll(it)
             moviesAdapter.notifyDataSetChanged()
+            rvMovies.scrollToPosition(0)
         })
     }
 
