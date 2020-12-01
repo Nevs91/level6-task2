@@ -105,6 +105,10 @@ class PopularMoviesFragment : Fragment() {
             return
         }
 
+        // Show the progress bar while the data is being requested/ loaded
+        progressBar.visibility = View.VISIBLE
+
+        // Request movies from the API
         viewModel.getPopularMovies(Integer.parseInt(etYear.text.toString()))
     }
 
@@ -120,7 +124,10 @@ class PopularMoviesFragment : Fragment() {
             movies.clear()
             movies.addAll(it)
             moviesAdapter.notifyDataSetChanged()
+            // Scroll to the top of the list when the content is loaded
             rvMovies.scrollToPosition(0)
+            // Hide the progress bar
+            progressBar.visibility = View.INVISIBLE
         })
     }
 
