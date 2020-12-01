@@ -52,11 +52,13 @@ class PopularMoviesFragment : Fragment() {
         btnSubmit.setOnClickListener {
 
             // Close the keyboard after submitting a year
+            // From https://stackoverflow.com/a/1109108
             if (activity?.currentFocus != null) {
                 val imm: InputMethodManager = requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
             }
 
+            // Validate the input field and (if valid) do a request API request
             this.validateAndSubmitMovieYear()
         }
 
