@@ -25,11 +25,12 @@ class TheMovieDatabaseRepository {
      */
     suspend fun getPopularMoviesByYear(year: Number)  {
         try {
-            //timeout the request after 5 seconds
+            // Timeout the request after 5 seconds
             val movieResponse = withTimeout(5_000) {
                 theMoviesDatabaseApiService.getPopularMovies(year, "popularity.desc")
             }
 
+            // Get the movies from the base class
             _movies.value = movieResponse.results
         } catch (error: Throwable) {
             throw MoviesDbApiError("Unable to retrieve movies", error)

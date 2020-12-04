@@ -16,7 +16,7 @@ class TheMovieDatabaseApi {
          */
         fun createApi(): TheMovieDatabaseApiService {
 
-            // Create an OkHttpClient to be able to make a log of the network traffic
+            // Create an OkHttpClient to intercept requests
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(KeyInterceptor())
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -37,6 +37,9 @@ class TheMovieDatabaseApi {
 
 class KeyInterceptor : Interceptor {
 
+    /**
+     * Intercept requests and add the API key as a query parameter
+     */
     override fun intercept(chain: Interceptor.Chain): Response {
         val original: Request = chain.request()
         val originalHttpUrl: HttpUrl = original.url
